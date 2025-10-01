@@ -5,12 +5,14 @@ class SignupStateModel {
   final bool isSuccess;
   final bool isFailed;
   final SignupModel? model;
+  final String errorMessage;
 
   SignupStateModel({
-    this.isLoading = true,
+    this.isLoading = false,
     this.isSuccess = false,
     this.isFailed = false,
     this.model,
+    this.errorMessage = '',
   });
 
   SignupStateModel copyWith({
@@ -18,12 +20,14 @@ class SignupStateModel {
     bool? isSuccess,
     bool? isFailed,
     SignupModel? model,
+    String? errorMessage,
   }) {
     return SignupStateModel(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailed: isFailed ?? this.isFailed,
       model: model ?? this.model,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 }
