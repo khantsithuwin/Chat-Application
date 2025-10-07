@@ -1,7 +1,9 @@
+import 'package:chat_application/features/auth/otp_confirm/pages/otp_confirm_page.dart';
 import 'package:chat_application/features/auth/signup/notifier/signup_state_model.dart';
 import 'package:chat_application/features/auth/signup/notifier/signup_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../common/theme/extension/color_brand.dart';
 import '../../../../common/widgets/brand_button_widget.dart';
@@ -18,6 +20,7 @@ class _SignupPageState extends ConsumerState<SignupPage> {
   String? _name;
   String? _email;
   String? _password;
+  bool _isRedirect = false;
   final SignupProvider _signupProvider = SignupProvider(
     () => SignupStateNotifier(),
   );
@@ -32,6 +35,18 @@ class _SignupPageState extends ConsumerState<SignupPage> {
     bool isFailed = model.isFailed;
     bool isSuccess = model.isSuccess;
     bool isForm = !isLoading && !isFailed && !isSuccess;
+
+    ref.listen(_signupProvider, (oldState, newState) {
+      if (newState.isSuccess && !_isRedirect) {
+        _isRedirect = true;
+        Future.delayed(Duration(seconds: 1)).then((_) {
+          if (context.mounted) {
+            Navigator.pop(context);
+            context.push("/confirm_otp", extra: _email);
+          }
+        });
+      }
+    });
 
     return Scaffold(
       backgroundColor: colorScheme.surface,

@@ -1,4 +1,5 @@
 import 'package:chat_application/features/auth/login/pages/login_page.dart';
+import 'package:chat_application/features/auth/otp_confirm/pages/otp_confirm_page.dart';
 import 'package:chat_application/features/auth/signup/pages/signup_page.dart';
 import 'package:chat_application/features/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -25,6 +26,13 @@ final router = GoRouter(
       path: "/signup",
       builder: (context, state) {
         return SignupPage();
+      },
+    ),
+    GoRoute(
+      name: "confirm_otp",
+      path: "/confirm_otp",
+      builder: (context, state) {
+        return OtpConfirmPage();
       },
     ),
   ],
