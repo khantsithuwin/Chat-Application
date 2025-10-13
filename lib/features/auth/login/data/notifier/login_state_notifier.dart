@@ -1,7 +1,9 @@
+import 'package:chat_application/common/storage/app_storage.dart';
 import 'package:chat_application/features/auth/login/data/notifier/login_state_model.dart';
 import 'package:chat_application/features/auth/login/data/services/login_services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 
 import '../models/login_model.dart';
 
@@ -9,6 +11,8 @@ typedef LoginProvider = NotifierProvider<LoginStateNotifier, LoginStateModel>;
 
 class LoginStateNotifier extends Notifier<LoginStateModel> {
   final LoginServices _services = LoginServices();
+
+  final AppStorage _storage = GetIt.I.get<AppStorage>();
 
   @override
   LoginStateModel build() {
@@ -35,6 +39,8 @@ class LoginStateNotifier extends Notifier<LoginStateModel> {
         email: email,
         password: password,
       );
+      _storage.saveToken(loginModel.data?.token ?? '');
+      _storage.saveUserId(loginModel.data?.user?.id ?? '');
       state = state.copyWith(
         isSuccess: true,
         loginModel: loginModel,

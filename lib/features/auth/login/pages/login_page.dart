@@ -21,6 +21,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final GlobalKey<FormState> _globalKeyLogin = GlobalKey();
   String? _email;
   String? _password;
+  final bool _isRedirect = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     bool isLoading = stateModel.isLoading;
     bool isSuccess = stateModel.isSuccess;
     bool isFailed = stateModel.isFailed;
+
+    ref.listen(_provider, (oldState, newState) {
+      if (newState.isSuccess && !_isRedirect) {
+        context.go("/contact");
+      }
+    });
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -101,6 +108,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                     SizedBox(height: 8.0),
                     TextFormField(
+                      obscureText: true,
                       style: textTheme.bodyLarge?.copyWith(
                         color: colorScheme.onSurface,
                       ),

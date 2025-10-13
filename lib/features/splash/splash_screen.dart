@@ -1,9 +1,18 @@
+import 'package:chat_application/common/storage/app_storage.dart';
 import 'package:chat_application/common/widgets/brand_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  final AppStorage _storage = GetIt.I.get<AppStorage>();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,12 @@ class SplashScreen extends StatelessWidget {
                     BrandButtonWidget(
                       text: "Start Messaging",
                       onPressed: () {
-                        context.push("/login");
+                        String token = _storage.getToken();
+                        if (token.isEmpty) {
+                          context.go("/login");
+                        } else {
+                          context.go("/contact");
+                        }
                       },
                     ),
                   ],
