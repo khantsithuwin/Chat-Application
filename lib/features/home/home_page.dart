@@ -22,87 +22,99 @@ class _HomePageState extends State<HomePage> {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(),
       body: shell,
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(24.0),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          boxShadow: [BoxShadow(color: Colors.grey, offset: Offset(0, 1))],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            InkWell(
-              onTap: () {
-                shell.goBranch(0);
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (selectedIndex == 0)
-                    Text(
-                      "Contact",
-                      style: textTheme.bodyMedium?.copyWith(
+      bottomNavigationBar: Card(
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              InkWell(
+                onTap: () {
+                  shell.goBranch(0);
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (selectedIndex == 0)
+                      Text(
+                        "Contact",
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorBrand.brandDefault,
+                        ),
+                      ),
+                    if (selectedIndex != 0) Icon(Icons.person_outline_rounded),
+
+                    if (selectedIndex == 0)
+                      Icon(
+                        Icons.circle,
+                        size: 8,
                         color: colorBrand.brandDefault,
                       ),
-                    ),
-                  if (selectedIndex != 0) Icon(Icons.person_outline_rounded),
-
-                  if (selectedIndex == 0)
-                    Icon(Icons.circle, size: 8, color: colorBrand.brandDefault),
-                ],
+                  ],
+                ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                shell.goBranch(1);
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (selectedIndex == 1)
-                    Text(
-                      "Chats",
-                      style: textTheme.bodyMedium?.copyWith(
+              InkWell(
+                onTap: () {
+                  shell.goBranch(1);
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (selectedIndex == 1)
+                      Text(
+                        "Chats",
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorBrand.brandDefault,
+                        ),
+                      ),
+                    if (selectedIndex != 1)
+                      Icon(Icons.chat_bubble_outline_outlined),
+
+                    if (selectedIndex == 1)
+                      Icon(
+                        Icons.circle,
+                        size: 8,
                         color: colorBrand.brandDefault,
                       ),
-                    ),
-                  if (selectedIndex != 1)
-                    Icon(Icons.chat_bubble_outline_outlined),
-
-                  if (selectedIndex == 1)
-                    Icon(Icons.circle, size: 8, color: colorBrand.brandDefault),
-                ],
+                  ],
+                ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                shell.goBranch(2);
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (selectedIndex == 2)
-                    Text(
-                      "Settings",
-                      style: textTheme.bodyMedium?.copyWith(
+              InkWell(
+                onTap: () {
+                  shell.goBranch(2);
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (selectedIndex == 2)
+                      Text(
+                        "Settings",
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorBrand.brandDefault,
+                        ),
+                      ),
+                    if (selectedIndex != 2) Icon(Icons.more_horiz_outlined),
+
+                    if (selectedIndex == 2)
+                      Icon(
+                        Icons.circle,
+                        size: 8,
                         color: colorBrand.brandDefault,
                       ),
-                    ),
-                  if (selectedIndex != 2) Icon(Icons.more_horiz_outlined),
-
-                  if (selectedIndex == 2)
-                    Icon(Icons.circle, size: 8, color: colorBrand.brandDefault),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
