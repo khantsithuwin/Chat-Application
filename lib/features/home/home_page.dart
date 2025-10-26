@@ -12,6 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final List<String> _titleList = ['Contacts', 'Chats', 'Setting'];
+
   @override
   Widget build(BuildContext context) {
     StatefulNavigationShell shell = widget.shell;
@@ -23,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      appBar: AppBar(),
+      appBar: AppBar(title: Text(_titleList[shell.currentIndex])),
       body: shell,
       bottomNavigationBar: Card(
         elevation: 5,
