@@ -1,4 +1,5 @@
 import 'package:chat_application/features/home/chat_details/data/models/message_model.dart';
+import 'package:chat_application/features/home/chat_details/data/models/send_message_model.dart';
 import 'package:chat_application/features/home/chat_details/data/notifier/chat_detail_state_model.dart';
 import 'package:chat_application/features/home/chat_details/data/services/chat_detail_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,13 +15,15 @@ class ChatDetailStateNotifier extends Notifier<ChatDetailStateModel> {
     return ChatDetailStateModel(messageModel: MessageModel());
   }
 
-  void getAllMessage({required String chatId}) async {
+  void getAllMessage({required String chatId, bool showLoading = true}) async {
     try {
-      state = state.copyWith(
-        isLoading: true,
-        isFailed: false,
-        isSuccess: false,
-      );
+      if (showLoading) {
+        state = state.copyWith(
+          isLoading: true,
+          isFailed: false,
+          isSuccess: false,
+        );
+      }
       MessageModel messageModel = await _service.getAllMesssage(chatId: chatId);
       state = state.copyWith(
         messageModel: messageModel,
@@ -33,12 +36,16 @@ class ChatDetailStateNotifier extends Notifier<ChatDetailStateModel> {
     }
   }
 
-  Future<void> sendMessage({
+  Future<Data?> sendMessage({
     required String chatId,
     required String content,
   }) async {
     try {
-      _service.sendMessage(chatId: chatId, content: content);
+      SendMessageModel sendMessage = await _service.sendMessage(
+        chatId: chatId,
+        content: content,
+      );
+      return sendMessage.data;
     } catch (e) {
       Future.error(e);
     }

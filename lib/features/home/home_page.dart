@@ -1,4 +1,5 @@
 import 'package:chat_application/common/theme/extension/color_brand.dart';
+import 'package:chat_application/common/web_socket/chat_socket.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,6 +14,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<String> _titleList = ['Contacts', 'Chats', 'Setting'];
+
+  @override
+  void initState() {
+    super.initState();
+    ChatSocket.connect();
+  }
 
   @override
   Widget build(BuildContext context) {

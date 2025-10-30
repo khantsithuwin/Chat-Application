@@ -1,9 +1,9 @@
 import 'package:chat_application/common/storage/app_storage.dart';
 import 'package:chat_application/common/theme/extension/color_brand.dart';
 import 'package:chat_application/common/theme/extension/color_neutral.dart';
+import 'package:chat_application/common/web_socket/chat_socket.dart';
 import 'package:chat_application/features/home/chat_details/data/models/message_model.dart';
 import 'package:chat_application/features/home/chat_details/data/notifier/chat_detail_state_notifier.dart';
-import 'package:chat_application/features/home/contacts/data/model/contact_model.dart';
 import 'package:chat_application/features/home/contacts/data/model/create_chat_model.dart';
 import 'package:chat_bubbles/bubbles/bubble_special_three.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +44,16 @@ class _ChatDetailsPageState extends ConsumerState<ChatDetailsPage> {
 
       if (id != null) {
         ref.read(_provider.notifier).getAllMessage(chatId: id);
+        ChatSocket.emit(cmd: ChatSocket.joinRoom, data: id);
+        ChatSocket.listen(
+          cmd: ChatSocket.newMessage,
+          callback: (v) {
+            print("new message is arrived........................");
+            ref
+                .read(_provider.notifier)
+                .getAllMessage(chatId: id, showLoading: false);
+          },
+        );
       }
     });
   }
@@ -155,15 +165,18 @@ class _ChatDetailsPageState extends ConsumerState<ChatDetailsPage> {
     try {
       String? id = _createChatModel?.data?.id;
       if (id != null) {
-        ref
+        final data = await ref
             .read(_provider.notifier)
             .sendMessage(chatId: id, content: _controller.text);
+        ChatSocket.emit(cmd: ChatSocket.sendMessage, data: data?.toJson());
+        _controller.clear();
       }
-      _controller.clear();
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Failed to sent!")));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to send')));
+      }
     }
   }
 }
