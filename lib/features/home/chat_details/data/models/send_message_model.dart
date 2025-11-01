@@ -30,30 +30,55 @@ class SendMessageModel {
 }
 
 class Data {
-  Data({this.id, this.sender, this.content, this.createdAt});
+  Data({
+    this.id,
+    this.sender,
+    this.content,
+    this.type,
+    this.chat,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
 
   Data.fromJson(dynamic json) {
     id = json['_id'];
     sender = json['sender'] != null ? Sender.fromJson(json['sender']) : null;
     content = json['content'];
+    type = json['type'];
+    chat = json['chat'];
     createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    v = json['__v'];
   }
 
   String? id;
   Sender? sender;
   String? content;
+  String? type;
+  dynamic chat;
   String? createdAt;
+  String? updatedAt;
+  num? v;
 
   Data copyWith({
     String? id,
     Sender? sender,
     String? content,
+    String? type,
+    dynamic chat,
     String? createdAt,
+    String? updatedAt,
+    num? v,
   }) => Data(
     id: id ?? this.id,
     sender: sender ?? this.sender,
     content: content ?? this.content,
+    type: type ?? this.type,
+    chat: chat ?? this.chat,
     createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    v: v ?? this.v,
   );
 
   Map<String, dynamic> toJson() {
@@ -63,7 +88,11 @@ class Data {
       map['sender'] = sender?.toJson();
     }
     map['content'] = content;
+    map['type'] = type;
+    map['chat'] = chat;
     map['createdAt'] = createdAt;
+    map['updatedAt'] = updatedAt;
+    map['__v'] = v;
     return map;
   }
 }

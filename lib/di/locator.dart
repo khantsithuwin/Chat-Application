@@ -1,4 +1,5 @@
 import 'package:chat_application/common/const/url_const.dart';
+import 'package:chat_application/common/theme/theme_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -30,4 +31,9 @@ Future<void> setupLocator() async {
     ),
   );
   GetIt.I.registerSingleton(authDio, instanceName: "auth");
+
+  ThemeProvider themeProvider = ThemeProvider(() {
+    return ThemeNotifier();
+  });
+  GetIt.I.registerSingleton(themeProvider);
 }

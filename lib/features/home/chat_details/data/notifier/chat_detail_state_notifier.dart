@@ -15,6 +15,16 @@ class ChatDetailStateNotifier extends Notifier<ChatDetailStateModel> {
     return ChatDetailStateModel(messageModel: MessageModel());
   }
 
+  void addTemSendMessage(String message) {
+    state = state.copyWith(
+      tempSendMessage: [...state.tempSendMessage, message],
+    );
+  }
+
+  void addTemRecMessage(String message) {
+    state = state.copyWith(tempRecMessage: [...state.tempRecMessage, message]);
+  }
+
   void getAllMessage({required String chatId, bool showLoading = true}) async {
     try {
       if (showLoading) {
@@ -33,6 +43,8 @@ class ChatDetailStateNotifier extends Notifier<ChatDetailStateModel> {
       );
     } catch (e) {
       state = state.copyWith(isSuccess: false, isFailed: true);
+    } finally {
+      state = state.copyWith(tempSendMessage: [], tempRecMessage: []);
     }
   }
 

@@ -49,9 +49,15 @@ class _ChatDetailsPageState extends ConsumerState<ChatDetailsPage> {
           cmd: ChatSocket.newMessage,
           callback: (v) {
             print("new message is arrived........................");
-            ref
-                .read(_provider.notifier)
-                .getAllMessage(chatId: id, showLoading: false);
+            if (mounted) {
+              String? latestMessage = v['content'];
+              if (latestMessage != null) {
+                ref.read(_provider.notifier).addTemRecMessage(latestMessage);
+              }
+              ref
+                  .read(_provider.notifier)
+                  .getAllMessage(chatId: id, showLoading: false);
+            }
           },
         );
       }
@@ -80,14 +86,12 @@ class _ChatDetailsPageState extends ConsumerState<ChatDetailsPage> {
         children: [
           Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (isLoading) Center(child: CircularProgressIndicator()),
                 if (isFailed) Center(child: Text("Try Again")),
                 if (isSuccess)
                   Expanded(
                     child: ListView.builder(
-                      padding: EdgeInsets.all(8.0),
                       reverse: true,
                       itemCount: message.length,
                       itemBuilder: (context, index) {
@@ -109,6 +113,38 @@ class _ChatDetailsPageState extends ConsumerState<ChatDetailsPage> {
                         );
                       },
                     ),
+                  ),
+                if (isSuccess)
+                  Column(
+                    children: [
+                      for (
+                        int i = 0;
+                        i < stateModel.tempSendMessage.length;
+                        i++
+                      )
+                        BubbleSpecialThree(
+                          isSender: true,
+                          color: colorBrand.brandDefault,
+                          text: stateModel.tempSendMessage[i],
+                          textStyle: textTheme.bodyMedium!.copyWith(
+                            color: colorNeutral.buttonText,
+                          ),
+                        ),
+                    ],
+                  ),
+                if (isSuccess)
+                  Column(
+                    children: [
+                      for (int i = 0; i < stateModel.tempRecMessage.length; i++)
+                        BubbleSpecialThree(
+                          isSender: false,
+                          color: colorScheme.surfaceContainerLow,
+                          text: stateModel.tempRecMessage[i],
+                          textStyle: textTheme.bodyMedium!.copyWith(
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                    ],
                   ),
               ],
             ),
@@ -133,11 +169,11 @@ class _ChatDetailsPageState extends ConsumerState<ChatDetailsPage> {
   Widget _chatTextBox() {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
     ColorBrand colorBrand = Theme.of(context).extension<ColorBrand>()!;
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 16.0),
+      child: Row(
+        children: [
+          Expanded(
             child: TextField(
               controller: _controller,
               onChanged: (_) {
@@ -151,13 +187,13 @@ class _ChatDetailsPageState extends ConsumerState<ChatDetailsPage> {
               ),
             ),
           ),
-        ),
-        IconButton(
-          color: colorBrand.brandDefault,
-          onPressed: _controller.text.trim().isEmpty ? null : _sendMessage,
-          icon: Icon(Icons.send_sharp),
-        ),
-      ],
+          IconButton(
+            color: colorBrand.brandDefault,
+            onPressed: _controller.text.trim().isEmpty ? null : _sendMessage,
+            icon: Icon(Icons.send_sharp),
+          ),
+        ],
+      ),
     );
   }
 
@@ -165,11 +201,15 @@ class _ChatDetailsPageState extends ConsumerState<ChatDetailsPage> {
     try {
       String? id = _createChatModel?.data?.id;
       if (id != null) {
+        ref.read(_provider.notifier).addTemSendMessage(_controller.text);
         final data = await ref
             .read(_provider.notifier)
             .sendMessage(chatId: id, content: _controller.text);
         ChatSocket.emit(cmd: ChatSocket.sendMessage, data: data?.toJson());
         _controller.clear();
+        ref
+            .read(_provider.notifier)
+            .getAllMessage(chatId: id, showLoading: false);
       }
     } catch (e) {
       if (mounted) {

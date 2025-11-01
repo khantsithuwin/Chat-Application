@@ -5,12 +5,16 @@ class ChatDetailStateModel {
   final bool isSuccess;
   final bool isFailed;
   final MessageModel messageModel;
+  final List<String> tempSendMessage;
+  final List<String> tempRecMessage;
 
   ChatDetailStateModel({
     required this.messageModel,
     this.isLoading = true,
     this.isSuccess = false,
     this.isFailed = false,
+    this.tempSendMessage = const [],
+    this.tempRecMessage = const [],
   });
 
   ChatDetailStateModel copyWith({
@@ -18,12 +22,16 @@ class ChatDetailStateModel {
     bool? isLoading,
     bool? isSuccess,
     bool? isFailed,
+    List<String>? tempSendMessage,
+    List<String>? tempRecMessage,
   }) {
     return ChatDetailStateModel(
       messageModel: messageModel ?? this.messageModel,
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailed: isFailed ?? this.isFailed,
+      tempSendMessage: tempSendMessage ?? this.tempSendMessage,
+      tempRecMessage: tempRecMessage ?? this.tempRecMessage,
     );
   }
 }
