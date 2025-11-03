@@ -1,4 +1,5 @@
 import 'package:chat_application/common/const/url_const.dart';
+import 'package:chat_application/common/routes/routes.dart';
 import 'package:chat_application/common/theme/theme_notifier.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -23,8 +24,12 @@ Future<void> setupLocator() async {
   authDio.interceptors.add(PrettyDioLogger());
   authDio.interceptors.add(
     InterceptorsWrapper(
-      onRequest: (options, interceptor) {
+      onRequest: (options, interceptor) async {
         AppStorage storage = GetIt.I.get<AppStorage>();
+        if (storage.getToken().isEmpty) {
+          await storage.logout();
+          router.goNamed("login");
+        }
         options.headers['Authorization'] = "Bearer ${storage.getToken()}";
         interceptor.next(options);
       },

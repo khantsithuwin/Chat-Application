@@ -98,24 +98,39 @@ class _ContactPageState extends ConsumerState<ContactPage> {
                   onTap: () async {
                     _createChat(contact);
                   },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        contact?.name ?? "",
-                        style: textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onSurface,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            contact?.name ?? "",
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurface,
+                            ),
+                          ),
+                          SizedBox(height: 8.0),
+                          Text(
+                            contact?.email ?? '',
+                            style: metaDataTextTheme.metaData1.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                          SizedBox(height: 16.0),
+                          Divider(color: colorNeutral.neutralLine),
+                        ],
                       ),
-                      SizedBox(height: 8.0),
-                      Text(
-                        contact?.email ?? '',
-                        style: metaDataTextTheme.metaData1.copyWith(
-                          color: colorScheme.onSurfaceVariant,
+                      if (contact?.isVerified == true)
+                        Tooltip(
+                          message: "This account is already verified",
+                          child: Icon(Icons.verified, color: Colors.green),
                         ),
-                      ),
-                      SizedBox(height: 16.0),
-                      Divider(color: colorNeutral.neutralLine),
+                      if (contact?.isVerified != true)
+                        Tooltip(
+                          message: "This account is not verified",
+                          child: Icon(Icons.warning, color: Colors.yellow),
+                        ),
                     ],
                   ),
                 );
